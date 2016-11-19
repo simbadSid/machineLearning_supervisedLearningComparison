@@ -45,10 +45,12 @@ int main(int argc, char **argv)
     
     
     
-  for(i=1,PosPred=PosEffect=PosEffPred=Erreur=0.0; i<=m; i++){
+  for(i=1,PosPred=PosEffect=PosEffPred=Erreur=0.0; i<=m; i++)
+  {
      if(Y[i]*h[i]<=0.0)
          Erreur+=1.0;
-     if(Y[i]==1.0){
+     if(Y[i]==1.0)
+     {
          PosEffect++;
          if(h[i]>0.0)
             PosEffPred++;

@@ -4,23 +4,25 @@
 
 int main(argc, argv)
 int argc;
-char **argv; 
+char **argv;
 {
     long int   i, j, m, d, T,t;
     double     *Y, **X, *h, *w, Erreur, Precision, Rappel, F, PosPred, PosEffect, PosEffPred;
     char       input_filename[200], params_filename[200];
 
-    if(argc!=3){
+    if(argc!=3)
+    {
         printf("USAGE : Perceptron-Test Filename ParamsFile\n");
         exit(0);
     }
     FileScan(argv[1],&m,&d);
     printf("Perceptron sur une base de test contenant %ld exemples en dimension %ld\n",m,d);
-    
+
     h = (double *)  malloc((m+1)*sizeof(double ));
     Y  = (double *)  malloc((m+1)*sizeof(double ));
     X  = (double **) malloc((m+1)*sizeof(double *));
-    if(!X){
+    if(!X)
+    {
         printf("Probleme d'allocation de la matrice des données\n");
         exit(0);
     }
@@ -44,10 +46,12 @@ char **argv;
 
 
     
-    for(i=1,PosPred=PosEffect=PosEffPred=Erreur=0.0; i<=m; i++){
+    for(i=1,PosPred=PosEffect=PosEffPred=Erreur=0.0; i<=m; i++)
+    {
         if(Y[i]*h[i]<=0.0)
             Erreur+=1.0;
-        if(Y[i]==1.0){
+        if(Y[i]==1.0)
+        {
             PosEffect++;
             if(h[i]>0.0)
                 PosEffPred++;
@@ -60,7 +64,7 @@ char **argv;
     Precision=PosEffPred/PosPred;
     Rappel=PosEffPred/PosEffect;
     F=2.0*Precision*Rappel/(Precision+Rappel);
-    
+
     printf("Precision:%lf Recall:%lf F1-measure:%lf Errorr=%lf\n",Precision,Rappel,F,Erreur);
     return 1;
 }

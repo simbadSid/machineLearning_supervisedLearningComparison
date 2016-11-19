@@ -2,8 +2,8 @@ EXEC	= AdaBoost-test AdaBoost-learn LogisticRegression-test LogisticRegression-l
 CC		= gcc
 CFLAGS 	= -g #-Wall -Werror
 LIB		= -lm
-src		= src
-bin		= bin
+src		= learningAlgo
+bin		= ../bin
 
 all : $(EXEC)
 
@@ -13,8 +13,8 @@ all : $(EXEC)
 
 
 #------------------------------------------------------------------------------------------------------------
-# --------------------------------------- Executables ------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------- Executables ------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------
 perceptron-learn: $(bin)/perceptron/utilitaire.o $(bin)/perceptron/perceptron.o $(bin)/perceptron/perceptron-learn-main.o
 	$(CC) $(CFLAGS) -o $@ $^
 
@@ -62,7 +62,7 @@ $(bin)/perceptron/%.o 			: $(src)/perceptron/%.c
 #-----------------------------------------------------------------------------------------------------------
 .PHONY	: clean mrproper
 clean:	#$(EXEC)
-		rm -f -r bin/*/*.o
+		rm -f -r $(bin)/*/*.o
 mrproper: clean
 		rm -rf $(EXEC)
 
