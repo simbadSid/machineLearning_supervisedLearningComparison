@@ -2,7 +2,8 @@ from ProblemInstance import ProblemInstance
 from util import *
 import sys
 import os
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 
@@ -71,6 +72,53 @@ def testSample():
     print "------------------------------------------------"
 
 
+
+
+def plotBarComparison(nbrTest, learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList, algoNameList):
+    fig, ax = plt.subplots()
+    index   = np.arange(nbrTest)
+    barWidth= .35
+
+    learnDistMin    = [learnErrorAvgList[i] - learnErrorMinList[i] for i in xrange(len(learnErrorAvgList))]
+    testDistMin     = [testErrorAvgList[i]  - testErrorMinList[i]  for i in xrange(len(testErrorAvgList))]
+    learnDistMax    = [learnErrorMaxList[i] - learnErrorAvgList[i] for i in xrange(len(learnErrorAvgList))]
+    testDistMax     = [testErrorMaxList[i]  - testErrorAvgList[i]  for i in xrange(len(testErrorAvgList))]
+
+    barLearnErrorAvg    = ax.bar(index,             learnErrorAvgList,  barWidth, color='r', yerr=[learnDistMin, learnDistMax])
+    barTestErrorAvg     = ax.bar(index+barWidth,    testErrorAvgList,   barWidth, color='y', yerr=[testDistMin,  testDistMax])
+
+    # add some text for labels, title and axes ticks
+    ax.set_ylabel('Error rate')
+    ax.set_title('Learning algorithms accuracy')
+    ax.set_xticks(index + barWidth)
+    ax.set_xticklabels(algoNameList)
+
+    ax.legend((barLearnErrorAvg[0], barTestErrorAvg[0]), ('Learning error', 'Test error'))
+
+    def autolabel(rects):
+        # attach some text labels
+        for rect in rects:
+            height = rect.get_height()
+            ax.text(rect.get_x() + rect.get_width()/2., 1.05*height, '%f' % float(height), ha='center', va='bottom')
+
+    autolabel(barLearnErrorAvg)
+    autolabel(barTestErrorAvg)
+    
+#    plt.margins(.2)
+    plt.ylim(-0.1, 1.2)  
+    plt.show()
+
+
+def printComparison(learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList):
+    print "\n\n\n\n\n"
+    print "Min Learn : " + str(learnErrorMinList)
+    print "Min Test  : " + str(testErrorMinList)
+    print "Avg Learn : " + str(learnErrorAvgList)
+    print "Avg Test  : " + str(testErrorAvgList)
+    print "Max Learn : " + str(learnErrorMaxList)
+    print "Max Test  : " + str(testErrorMaxList)
+
+
 if __name__ == "__main__":
     if (PARAMETER_CLEAN_SAMPLE in sys.argv[1:]):
         cleanSample()
@@ -87,4 +135,5 @@ if __name__ == "__main__":
     (learnErrorMinList, learnErrorMaxList,  learnErrorAvgList,
      testErrorMinList,  testErrorMaxList,   testErrorAvgList)   = problemInstance.computeLearnError(PATH_PROGRAM, PATH_SAMPLE_LEARN_NORMALIZED, PATH_SAMPLE_TEST_NORMALIZED, PATH_PARAMETER, PATH_PROGRAM_OUTPUT)
 
-
+    plotBarComparison(problemInstance.getNbrLearningAlgo(), learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList, problemInstance.getLearningAlgoNameList())
+    printComparison(learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList)

@@ -35,11 +35,14 @@ class ProblemInstance:
     def getNbrTestSet(self):
         return len(self.testSetName)
 
+    def getTestSetName(self, testSetIndex):
+        return self.testSetName[testSetIndex]
+
     def getLearningAlgoName(self, learningAlgoIndex):
         return self.learningAlgoName[learningAlgoIndex]
 
-    def getTestSetName(self, testSetIndex):
-        return self.testSetName[testSetIndex]
+    def getLearningAlgoNameList(self):
+        return self.learningAlgoName
 
 
     # -----------------------------
