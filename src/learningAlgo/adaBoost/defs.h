@@ -82,7 +82,7 @@ void Normalize(double **, long int, long int);
 void ConstructTrainTest(char *, double **, double *, long int, long int, double);
 void ChrgMatrix(char *, DATA);
 void ChrgMatrixUnSup(char *, long int, long int, double **);
-void lire_commande(LR_PARAM *, char *, char *, int , char **);
+void lire_commande(LR_PARAM *, char *, char *, char *, int , char **);
 void lire_commande_kmoyennes(LR_PARAM *, char *, char *, int, char **);
 void save_params(char *,double *,long int);
 void load_params(char *,double *,long int);
@@ -119,7 +119,7 @@ void MarginPerceptron(double **, double *, double *, long int, long int, double,
 // Modèle régression logisitque
 void RegressionLogistique(double *, DATA, LR_PARAM);
 // Algorithme d'AdaBoost
-long int Boosting(DATA, DATA, double *, double **, double *, LR_PARAM);
+long int Boosting(DATA, DATA, double *, double **, double *, LR_PARAM, double *);
 // algorithme des k-moyennes
 void Kmoyennes(double **, long int, long int, long int, long int **, double **, long int *, double, long int , int);
 // Modèle naive-Bayes semi-supervisé

@@ -171,6 +171,22 @@ void save_params(char *filename,double *w,long int d)
   fclose(fd);   
 }
 
+
+void save_output(char *fileName, double error)
+{
+	FILE *fd;
+
+	if((fd=fopen(fileName,"w"))==NULL)
+	{
+		printf("Error of creation of %s - save_output\n",fileName);
+		exit(0);
+	}
+
+    fprintf(fd,"%lf ", error);
+	fclose(fd);
+}
+
+
 void load_params(char *filename,double *w,long int d)
 {
     long int j;

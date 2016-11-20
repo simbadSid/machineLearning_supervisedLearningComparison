@@ -17,8 +17,8 @@ char **argv;
     char       input_filename[200], params_filename[200];
     DATA       TestSet;
 
-    if(argc!=3){
-        printf("USAGE : AdaBoost-Test Filename ParamsFile\n");
+    if(argc!=4){
+        printf("USAGE : AdaBoost-Test Filename ParamsFile OutputFile \n");
         exit(0);
     }
     TestSet.u=0;
@@ -89,7 +89,18 @@ char **argv;
     F=2.0*Precision*Rappel/(Precision+Rappel);
     
     printf("Precision:%lf Recall:%lf F1-measure:%lf Error=%lf\n",Precision,Rappel,F,Erreur);
-    return 1;
+
+	FILE *fd;
+
+	if((fd=fopen(argv[3],"w")) == NULL)
+	{
+		printf("Error of creation of %s - save_output\n",argv[3]);
+		exit(0);
+	}
+    fprintf(fd,"%lf ", Erreur);
+	fclose(fd);
+
+	return 1;
 }
 
 

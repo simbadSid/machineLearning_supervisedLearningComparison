@@ -33,6 +33,7 @@ def swapFileLines(sampleProportion, allFileName, pathInputFile, pathOutputFile1,
     if (sampleProportion < .0 or sampleProportion > 1.):
         raise Exception("Wrong proportion value: " + learningSampleProportion)
 
+#####TODO Doesn't work at all
     nbrLineInput    = countNbrLine(pathInputFile    + allFileName)
     fileInput       = open(pathInputFile    + allFileName, 'r')
     fileOutput1     = open(pathOutputFile1  + allFileName, 'w')
@@ -42,13 +43,8 @@ def swapFileLines(sampleProportion, allFileName, pathInputFile, pathOutputFile1,
 
     for i in xrange(nbrLineInput):
         line    = nextMeaningLine(fileInput)
-        if (nbrLintOutput1 > nbrLintOutput2):
-            newProportion = .5 - float(nbrLintOutput2) / float(nbrLintOutput1)
-        else:
-            newProportion = .5 + float(nbrLintOutput1) / float(nbrLintOutput2)
-
-        rnd     = random.uniform(.0, newProportion)
-        if (rnd <= sampleProportion):
+        rnd     = random.uniform(.0, 1.)
+        if ((nbrLintOutput2 == 0) or (rnd <= sampleProportion)):
             fileOutput1.write(line + "\n")
             nbrLintOutput1 -= 1
         else:
@@ -63,12 +59,12 @@ def swapFileLines(sampleProportion, allFileName, pathInputFile, pathOutputFile1,
 def normalizeSample(sample):
     maxElement  = None
     sampleParsed= []
-    for x in sample[0:]:
+    for x in sample[1:]:
         try:
             xParsed = float(x)
         except ValueError:
             if len(x) == 1:
-                xParsed = ord(x)
+                xParsed = float(ord(x))
             else:
                 raise Exception("Can not normalize a sample containing the value: " + x)
         sampleParsed.append(xParsed)
@@ -82,10 +78,20 @@ def normalizeSample(sample):
     return result
 
 
-def roughlyProportional(proportion, value0, value1, gap=100):
+def writeSample(sample, file, sampleSeparationInputChar=' '):
+    nbrElem = len(sample)
+    for x in sample:
+        file.write(str(x))
+        nbrElem -= 1
+        if (nbrElem > 0):
+            file.write(sampleSeparationInputChar)
+    file.write("\n")
+
+
+def roughlyProportional(proportion, value0, value1, gap=20):
     prod = value0 * proportion
     if ((prod < value1 - gap) or (prod > value1 + gap)):
-        print "\t\t\t* Proportion = " + str(proportion) + "    value0 = " + str(value0) + "    value1 = " + str(value1)
+#        print "\t\t\t* Proportion = " + str(proportion) + "    value0 = " + str(value0) + "    value1 = " + str(value1)
         return False
     return True
 

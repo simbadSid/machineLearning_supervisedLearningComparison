@@ -6,11 +6,11 @@ int main(int argc, char **argv)
   LR_PARAM   input_params;
   long int   i,j;
   double     *w, *h, Erreur, Precision, Rappel, F, PosPred, PosEffect, PosEffPred;
-  char input_filename[200], params_filename[200];
+  char input_filename[200], params_filename[200], output_filename[200];
   DATA       TrainingSet;
 
   // Reading of the line command 
-  lire_commande(&input_params,input_filename, params_filename,argc, argv);
+  lire_commande(&input_params,input_filename, params_filename, output_filename, argc, argv);
   // Scan of the training file, procedure defined in utilitaire.c
   FileScan(input_filename,&TrainingSet.m,&TrainingSet.d);
   printf("The training set contains %ld examples in dimension %ld\n",TrainingSet.m,TrainingSet.d);
@@ -74,14 +74,13 @@ int main(int argc, char **argv)
   free((char *)h);
   // Ecriture des paramètres du poids dans le fichier params_filename, procédure définie dans utilitaire.c
   save_params(params_filename, w,TrainingSet.d);
-
+  save_output(output_filename, Erreur);
   return 1;
 }
 
 
 
-void lire_commande(LR_PARAM *ss_input_params, char *fic_apprentissage, char *fic_params, \
-                   int num_args, char **args)
+void lire_commande(LR_PARAM *ss_input_params, char *fic_apprentissage, char *fic_params, char *fic_output, int num_args, char **args)
 {
   long int i;
 
@@ -98,7 +97,7 @@ void lire_commande(LR_PARAM *ss_input_params, char *fic_apprentissage, char *fic
       default : printf("Unknown option %s\n",args[i]);Standby();aide();exit(0);
     }
   }
-  if((i+1)>=num_args){
+  if((i+2)>=num_args){
     printf("\n ---------------------------- \n Number of input parameters insufficient \n ----------------------------\n\n");
     Standby();
     aide();
@@ -107,6 +106,7 @@ void lire_commande(LR_PARAM *ss_input_params, char *fic_apprentissage, char *fic
   printf("%s %s\n",args[i],args[i+1]);
   strcpy(fic_apprentissage, args[i]);
   strcpy(fic_params, args[i+1]);
+  strcpy(fic_output, args[i+2]);
 }
 
 void Standby(){

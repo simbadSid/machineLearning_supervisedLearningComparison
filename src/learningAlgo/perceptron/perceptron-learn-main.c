@@ -6,11 +6,11 @@ int main(int argc, char **argv)
   LR_PARAM   input_params;
   long int   i,j, m, d;
   double     *w, *Y, **X, precision,  *h, Erreur, Precision, Rappel, F, PosPred, PosEffect, PosEffPred;
-  char input_filename[200], params_filename[200];
+  char input_filename[200], params_filename[200], output_filename[200];
 
     srand(time(NULL));
   // Reading the parameters line
-  lire_commande(&input_params,input_filename, params_filename,argc, argv);
+  lire_commande(&input_params,input_filename, params_filename, output_filename, argc, argv);
   // Scan of the training file 
   // definition in utilitaire.c
   FileScan(input_filename,&m,&d);
@@ -70,13 +70,14 @@ int main(int argc, char **argv)
   free((char *)h);
 
   save_params(params_filename, w,d);
+  save_output(output_filename, Erreur);
 
   return 1;
 }
 
 
 
-void lire_commande(LR_PARAM *input_params, char *fic_apprentissage, char *fic_params, int num_args, char **args)
+void lire_commande(LR_PARAM *input_params, char *fic_apprentissage, char *fic_params, char *ficOutput, int num_args, char **args)
 {
   long int i;
 
@@ -93,7 +94,7 @@ void lire_commande(LR_PARAM *input_params, char *fic_apprentissage, char *fic_pa
       default : printf("Unknown option %s\n",args[i]);Standby();aide();exit(0);
     }
   }
-  if((i+1)>=num_args){
+  if((i+2)>=num_args){
     printf("\n ---------------------------- \n Insuffisant number of parameters\n ----------------------------\n\n");
     Standby();
     aide();
@@ -102,6 +103,7 @@ void lire_commande(LR_PARAM *input_params, char *fic_apprentissage, char *fic_pa
   printf("%s %s\n",args[i],args[i+1]);
   strcpy(fic_apprentissage, args[i]);
   strcpy(fic_params, args[i+1]);
+  strcpy(ficOutput, args[i+2]);
 }
 
 void Standby(){

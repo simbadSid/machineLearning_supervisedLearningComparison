@@ -5,6 +5,8 @@ import os
 
 
 
+
+
 PARAMETER_TEST_SAMPLE          = "testSample"
 PARAMETER_CLEAN_SAMPLE         = "clean"
 
@@ -19,6 +21,9 @@ PATH_SAMPLE_LEARN_NORMALIZED   = "../../resource/sample/sampleLearnNormalized/"
 PATH_SAMPLE_TEST               = "../../resource/sample/sampleTest/"
 PATH_SAMPLE_TEST_NORMALIZED    = "../../resource/sample/sampleTestNormalized/"
 
+PATH_PARAMETER                 = "../../resource/outputParameter/"
+PATH_PROGRAM                   = "../"
+PATH_PROGRAM_OUTPUT            = "../../resource/outputProgram/"
 LEARNING_SAMPLE_PROPORTION     = .6
 
 
@@ -26,7 +31,7 @@ LEARNING_SAMPLE_PROPORTION     = .6
 
 
 def cleanSample():
-    pathDirList = [PATH_SAMPLE_LEARN, PATH_SAMPLE_TEST, PATH_TEST_SET_NORMALIZED, PATH_SAMPLE_LEARN_NORMALIZED, PATH_SAMPLE_TEST_NORMALIZED]
+    pathDirList = [PATH_SAMPLE_LEARN, PATH_SAMPLE_TEST, PATH_TEST_SET_NORMALIZED, PATH_SAMPLE_LEARN_NORMALIZED, PATH_SAMPLE_TEST_NORMALIZED, PATH_PARAMETER, PATH_PROGRAM_OUTPUT]
 
     for path in pathDirList:
         for file in os.listdir(path):
@@ -79,9 +84,7 @@ if __name__ == "__main__":
         testSample()
         sys.exit()
 
-    for algo in xrange(problemInstance.getNbrLearningAlgo()):
-        print "\t- Algo name = " + problemInstance.getLearningAlgoName(algo)
-        for testSet in xrange(problemInstance.getNbrTestSet()):
-            print "\t\t- Test set name = " + problemInstance.getTestSetName(testSet)
-            
+    (learnErrorMinList, learnErrorMaxList,  learnErrorAvgList,
+     testErrorMinList,  testErrorMaxList,   testErrorAvgList)   = problemInstance.computeLearnError(PATH_PROGRAM, PATH_SAMPLE_LEARN_NORMALIZED, PATH_SAMPLE_TEST_NORMALIZED, PATH_PARAMETER, PATH_PROGRAM_OUTPUT)
+
 

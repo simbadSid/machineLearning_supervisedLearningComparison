@@ -10,8 +10,8 @@ char **argv;
     double     *h, *w, Erreur, Precision, Rappel, F, PosPred, PosEffect, PosEffPred;
     DATA       TestSet;
 
-    if(argc!=3){
-        printf("USAGE : LogisticRegression-Test Filename ParamsFile\n");
+    if(argc!=4){
+        printf("USAGE : LogisticRegression-Test Filename ParamsFile OutputFileName\n");
         exit(0);
     }
     TestSet.u=0;
@@ -63,6 +63,16 @@ char **argv;
     F=2.0*Precision*Rappel/(Precision+Rappel);
     
     printf("Precision:%lf Rappel:%lf mesure-F:%lf Erreur=%lf\n",Precision,Rappel,F,Erreur);
+
+    FILE *fd;
+    if((fd=fopen(argv[3],"w")) == NULL)
+	{
+		printf("Error of creation of %s - save_output\n",argv[3]);
+		exit(0);
+	}
+    fprintf(fd,"%lf ", Erreur);
+	fclose(fd);
+
     return 1;
 }
 

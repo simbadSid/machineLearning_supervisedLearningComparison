@@ -8,11 +8,11 @@ char **argv;
 {
     long int   i, j, m, d, T,t;
     double     *Y, **X, *h, *w, Erreur, Precision, Rappel, F, PosPred, PosEffect, PosEffPred;
-    char       input_filename[200], params_filename[200];
+    char       input_filename[200], params_filename[200], output_filename[200];
 
-    if(argc!=3)
+    if(argc!=4)
     {
-        printf("USAGE : Perceptron-Test Filename ParamsFile\n");
+        printf("USAGE : Perceptron-Test Filename ParamsFile OutputFileName\n");
         exit(0);
     }
     FileScan(argv[1],&m,&d);
@@ -66,6 +66,17 @@ char **argv;
     F=2.0*Precision*Rappel/(Precision+Rappel);
 
     printf("Precision:%lf Recall:%lf F1-measure:%lf Errorr=%lf\n",Precision,Rappel,F,Erreur);
+
+	FILE *fd;
+
+	if((fd=fopen(argv[3],"w")) == NULL)
+	{
+		printf("Error of creation of %s - save_output\n",argv[3]);
+		exit(0);
+	}
+    fprintf(fd,"%lf ", Erreur);
+	fclose(fd);
+
     return 1;
 }
 

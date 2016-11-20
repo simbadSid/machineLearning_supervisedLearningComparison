@@ -1,7 +1,6 @@
 #include "defs.h"
 
-void lire_commande(LR_PARAM *boost_input_params, char *fic_apprentissage, char *fic_params, \
-                   int num_args, char **args)
+void lire_commande(LR_PARAM *boost_input_params, char *fic_apprentissage, char *fic_params, char *fic_output, int num_args, char **args)
 {
     long int i;
     
@@ -16,7 +15,7 @@ void lire_commande(LR_PARAM *boost_input_params, char *fic_apprentissage, char *
             default : printf("Unknown option %s\n",args[i]);Standby();aide();exit(0);
         }
     }
-    if((i+1)>=num_args){
+    if((i+2)>=num_args){
         printf("\n ---------------------------- \n Insufficient number of parameters \n ----------------------------\n\n");
         Standby();
         aide();
@@ -25,6 +24,7 @@ void lire_commande(LR_PARAM *boost_input_params, char *fic_apprentissage, char *
     printf("%s %s\n",args[i],args[i+1]);
     strcpy(fic_apprentissage, args[i]);
     strcpy(fic_params, args[i+1]);
+    strcpy(fic_output, args[i+2]);
 }
 
 void Standby(){
@@ -53,11 +53,11 @@ char **argv;
     LR_PARAM input_params;
     long int   i, t;
     double     *Dt, *h, **W, *Alpha, *H;
-    char input_filename[200], params_filename[200];
+    char input_filename[200], params_filename[200], output_filename[200];
     DATA       TrainingSet, Echantillon;
 
     // Commande line
-    lire_commande(&input_params,input_filename, params_filename,argc, argv);
+    lire_commande(&input_params,input_filename, params_filename, output_filename, argc, argv);
     // File scan defined in utilitaire.c
     TrainingSet.u=Echantillon.u=0;
     FileScan(input_filename,&TrainingSet.m,&TrainingSet.d);
@@ -111,9 +111,21 @@ char **argv;
     // File loading defined in utilitaire.c
     ChrgMatrix(input_filename, TrainingSet);
 
-    t=Boosting(TrainingSet, Echantillon, Dt,W, Alpha,input_params);
+    double Erreur;
+    t=Boosting(TrainingSet, Echantillon, Dt,W, Alpha,input_params, &Erreur);
         
     save_adaboost_params(params_filename,W,Alpha,t,TrainingSet.d);
+
+    FILE *fd;
+	if((fd=fopen(output_filename,"w"))==NULL)
+	{
+		printf("Error of creation of %s\n",output_filename);
+		exit(0);
+	}
+
+	fprintf(fd,"%lf ", Erreur);
+	fclose(fd);
+
     return 1;
 }
 

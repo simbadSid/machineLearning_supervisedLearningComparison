@@ -88,10 +88,11 @@ double   Z1;
 }
 
 
-long int Boosting(TrainSet, Echantillon, Dt, W, Alpha, input_params)
+long int Boosting(TrainSet, Echantillon, Dt, W, Alpha, input_params, outputError)
 DATA     TrainSet, Echantillon;
 double   *Dt, **W, *Alpha;
 LR_PARAM input_params;
+double	 *outputError;
 {
     long int i, j, t, epoque=0;
     double *h, err=0.0, E, Z;
@@ -137,6 +138,8 @@ LR_PARAM input_params;
         t-=2;
     
   free((char *) h);
+
+  *outputError = err;
   return(t);
 }
 
