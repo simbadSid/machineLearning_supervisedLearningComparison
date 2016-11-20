@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 PARAMETER_TEST_SAMPLE          = "testSample"
 PARAMETER_CLEAN_SAMPLE         = "clean"
+PARAMETER_NORMALIZED_DATA       = "normalized"
 
 PATH_LEARNING_ALGO             = "../learningAlgo/"
 
@@ -74,7 +75,7 @@ def testSample():
 
 
 
-def plotBarComparison(nbrTest, learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList, algoNameList):
+def plotBarComparison(nbrTest, isNormalizedData, learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList, algoNameList):
     fig, ax = plt.subplots()
     index   = np.arange(nbrTest)
     barWidth= .35
@@ -88,8 +89,11 @@ def plotBarComparison(nbrTest, learnErrorMinList, learnErrorMaxList, learnErrorA
     barTestErrorAvg     = ax.bar(index+barWidth,    testErrorAvgList,   barWidth, color='y', yerr=[testDistMin,  testDistMax])
 
     # add some text for labels, title and axes ticks
+    title = 'Learning algorithms accuracy'
+    if (isNormalizedData):
+        title += " (normalized data)"
     ax.set_ylabel('Error rate')
-    ax.set_title('Learning algorithms accuracy')
+    ax.set_title(title)
     ax.set_xticks(index + barWidth)
     ax.set_xticklabels(algoNameList)
 
@@ -132,8 +136,14 @@ if __name__ == "__main__":
         testSample()
         sys.exit()
 
-    (learnErrorMinList, learnErrorMaxList,  learnErrorAvgList,
-     testErrorMinList,  testErrorMaxList,   testErrorAvgList)   = problemInstance.computeLearnError(PATH_PROGRAM, PATH_SAMPLE_LEARN_NORMALIZED, PATH_SAMPLE_TEST_NORMALIZED, PATH_PARAMETER, PATH_PROGRAM_OUTPUT)
+    isNormalizedData = PARAMETER_NORMALIZED_DATA in sys.argv[1:]
+    if (isNormalizedData):
+        (learnErrorMinList, learnErrorMaxList,  learnErrorAvgList,
+         testErrorMinList,  testErrorMaxList,   testErrorAvgList)   = problemInstance.computeLearnError(PATH_PROGRAM, PATH_SAMPLE_LEARN_NORMALIZED, PATH_SAMPLE_TEST_NORMALIZED, PATH_PARAMETER, PATH_PROGRAM_OUTPUT)
+    else:
+        (learnErrorMinList, learnErrorMaxList,  learnErrorAvgList,
+         testErrorMinList,  testErrorMaxList,   testErrorAvgList)   = problemInstance.computeLearnError(PATH_PROGRAM, PATH_SAMPLE_LEARN, PATH_SAMPLE_TEST, PATH_PARAMETER, PATH_PROGRAM_OUTPUT)
 
-    plotBarComparison(problemInstance.getNbrLearningAlgo(), learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList, problemInstance.getLearningAlgoNameList())
     printComparison(learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList)
+    plotBarComparison(problemInstance.getNbrLearningAlgo(), isNormalizedData, learnErrorMinList, learnErrorMaxList, learnErrorAvgList, testErrorMinList, testErrorMaxList, testErrorAvgList, problemInstance.getLearningAlgoNameList())
+
