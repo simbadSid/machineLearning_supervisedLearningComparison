@@ -88,7 +88,7 @@ def writeSample(sample, file, sampleSeparationInputChar=' '):
     file.write("\n")
 
 
-def roughlyProportional(proportion, value0, value1, gap=20):
+def roughlyProportional(proportion, value0, value1, gap=200):
     prod = value0 * proportion
     if ((prod < value1 - gap) or (prod > value1 + gap)):
 #        print "\t\t\t* Proportion = " + str(proportion) + "    value0 = " + str(value0) + "    value1 = " + str(value1)
